@@ -1,0 +1,196 @@
+<script>
+  /*    ## Problema 3: Sistema de Estoque de Produtos com Preço
+
+  ### interessante
+
+
+  ### Requisitos:
+
+  1. Função para validar entrada: Valide quantidade e preço (use while para re-solicitar dados inválidos).
+  2. Função para adicionar produto: Adicione nome, quantidade e preço ao array.
+  3. Função para remover produto: Remova um produto específico do array.
+  4. Função para listar produtos por faixa de preço: Use for e if...else para filtrar:
+
+  
+  5. Função para alertar sobre estoque baixo: Identifique produtos com quantidade <= 5.
+  6. Menu interativo: Use while com if...else aninhado para navegação.
+  
+  Dados Iniciais:
+  
+  ```javascript
+  let nomeProdutos = ["Arroz", "Feijão", "Açúcar", "Sal"];
+  let quantidades = [50, 30, 20, 15];
+  let precos = [3.50, 8.00, 4.50, 2.00];
+  ```
+  **DESAFIO:** Crie um sistema robusto que valide todas as entradas, permita manipulação completa do estoque e gere relatórios detalhados.
+  
+  Contexto: Uma loja pequena precisa gerenciar seu estoque. O sistema deve permitir adicionar produtos, remover, ajustar preços, e gerar relatórios de produtos caros, baratos e com baixo estoque.
+  - Produtos baratos (< R$ 50)
+  - Produtos médios (R$ 50 a R$ 150)
+  - Produtos caros (> R$ 150)
+  */
+  ///////////////////////////////////////////////////////////////////////////////////
+
+  let produtos = [
+    {
+      nome: "Arroz",
+      quantidade: 50,
+      precos: 3.5,
+    },
+    {
+      nome: "Feijão",
+      quantidade: 30,
+      precos: 8,
+    },
+    {
+      nome: "Açucar",
+      quantidade: 20,
+      precos: 4.5,
+    },
+    {
+      nome: "Sal",
+      quantidade: 15,
+      precos: 2,
+    },
+  ];
+  let oQQuer = "";
+  do {
+    oQQuer = prompt(
+      "O que vc quere fazer:\n 1. Adicionar\n 2. Remover\n 3. Ajustar Preço\n 4. Gerar relatorio de produtos"
+    )
+      .trim()
+      .toLowerCase();
+  } while (validarOQueFazer(oQQuer));
+
+  function validarOQueFazer(a) {
+    if (a === "remover" || a === "1") {
+      adicionar();
+      return true
+    } else if (a === "adicionar" || a === "2") {
+      remover();
+      return true
+    } else if (a === "ajustar precos" || a === "3") {
+      aju1starPrecos();
+      return true
+    } else if (a === "gerar relatorio de produtos" || a === "4") {
+      relatorio();
+      return true
+    } else {
+      alert("Opção inválida! Tente novamente.");
+      return false;
+    }
+  }
+  function validarNome(nomeProduto) {
+    for (let i = 0; i < produtos.length; i++) {
+      if (nomeProduto !== produtos[i].nome) {
+        return true;
+      } else {
+        alert("Produto já existe no estoque!");
+        return false;
+        break;
+      }
+    }
+  }
+  
+  // Adicionar
+  let produtoNome = "";
+  let produtoPreco = "";
+  let produtoQuantidade = "";
+  function adicionar() {
+    do {
+      produtoNome = prompt("Qual é o nome do produto?");
+    } while (!validarNome(produtoNome));
+    do {
+      produtoQuantidade = Number(prompt("Qual é a quantidade do produto?"));
+    } while (!isNaN(produtoQuantidade));
+    do {
+      produtoPreco = Number(prompt("Qual é o preço do produto?"));
+    } while (!isNaN(produtoPreco));
+    produtos.push({
+      nome: produtoNome,
+      quantidade: produtoQuantidade,
+      precos: produtoPreco,
+    });
+  }
+  
+  // Remover
+  let produtoNomeRemover = "";
+  let itensDispo = [];
+  function remover() {
+    for (let i = 0; i < produtos.length; i++) {
+      itensDispo.push(produtos[i].nome);
+    }
+    produtoNomeRemover = prompt(
+      "Qual é o nome do produto que vc quer remover?\n" + itensDispo.join(", ")
+    );
+    for (let i = 0; i < produtos.length; i++) {
+      if (produtoNomeRemover === produtos[i].nome) {
+        produtos.splice(i, 1);
+        alert(`Produto ${produtoNomeRemover} removido com sucesso!`);
+        return true
+        break;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  // Ajustar
+  let produtoNomeAjustar = "";
+  let novoPreco = "";
+  let itensDispoAjustar = [];
+  function aju1starPrecos() {
+    for (let i = 0; i < produtos.length; i++) {
+      itensDispoAjustar.push(produtos[i].nome);
+    }
+    produtoNomeAjustar = prompt(
+      "Qual é o nome do produto que vc quer ajustar o preço?\n" +
+        itensDispoAjustar
+    );
+    for (let i = 0; i < produtos.length; i++) {
+      if (produtoNomeAjustar === produtos[i].nome) {
+        do {
+          novoPreco = Number(prompt("Qual é o novo preço do produto?"));
+        } while (isNaN(novoPreco));
+        produtos[i].precos = novoPreco;
+        alert(
+          `Preço do produto ${produtoNomeAjustar} ajustado com sucesso para R$${novoPreco}!`
+        );
+        break;
+      } else {
+        alert("Produto não encontrado no estoque!");
+      }
+    }
+  }
+
+  let baratos = [];
+  let caros = [];
+  let medios = [];
+  let poucos = [];
+  function relatorio() {
+    for (let i = 0; i < produtos.length; i++) {
+      if (produtos[i].precos < 50) {
+        baratos.push(produtos[i].nome + " - R$" + produtos[i].precos);
+      } else if (produtos[i].precos >= 50 && produtos[i].precos <= 150) {
+        medios.push(produtos[i].nome + " - R$" + produtos[i].precos);
+      } else {
+        caros.push(produtos[i].nome + " - R$" + produtos[i].precos);
+      }
+
+      if (produtos[i].quantidade <= 5) {
+        pouco.push(
+          produtos[i].nome + " - Quantidade: " + produtos[i].quantidade
+        );
+      }
+    }
+    document.write(
+      `Produtos Baratos:\n ${baratos.join(
+        ", "
+      )}\n\nProdutos Médios:\n ${medios.join(
+        ", "
+      )}\n\nProdutos Caros:\n ${caros.join(
+        ", "
+      )}\n\nPoucos produtos:\n ${poucos}`
+    );
+  }
+</script>
