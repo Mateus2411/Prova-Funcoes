@@ -39,9 +39,14 @@
   ];
 
   // Função map
-  function map(produtos) {
-    produtos.map((p, i) => `${i + 1}. ${p.nome}`).join("\n");
+  function map() {
+    return produtos
+      .map((p, i) => `${i + 1}. ${p.nome} - R$${p.preco}`)
+      .join("\n");
   }
+  /*
+  Função que mapeia os itens do array de elementos e trandorma/manipula como quiser
+  */
 
   let opcao = "";
   do {
@@ -58,16 +63,16 @@
 
     if (opcao === "1" || opcao === "adicionar") adicionar();
     else if (opcao === "2" || opcao === "remover") remover();
-    else if (
-      opcao === "3" ||
-      opcao === "ajustar preço" ||
-      opcao === "ajustar precos"
-    )
-      ajustarPrecos();
+    else if (opcao === "3" || opcao === "ajustar preço" || opcao === "ajustar precos") ajustarPrecos();
     else if (opcao === "4" || opcao === "gerar relatorio") relatorio();
   } while (opcao !== "0");
   // #endregion
+
   // #region Validar o Nome
+  /*
+  Verifica se a um produto com o nome ja existente
+  */
+
   function validarNome(nomeProduto) {
     if (!nomeProduto) return false;
 
@@ -80,6 +85,7 @@
     return true;
   }
   // #endregion
+
   //#region Adicionar
   function adicionar() {
     let nome = "";
@@ -99,25 +105,15 @@
     } while (isNaN(preco) || preco <= 0);
 
     produtos.push({ nome, quantidade, preco });
-    alert("Produto adicionad com sucesso!");
+    alert("Produto adicionado com sucesso!");
   }
   //#endregion
+
   //#region Remover
   function remover() {
     let lista = map();
 
     let nomeRemover = prompt("Qual produto deseja remover?\n\n" + lista);
-
-    // Função ```.map``` para mapear e modificar o array que é armazenado em ``lista``
-    // Respondido:
-    /*
-    lista = `
-    1. Arroz
-      2. feijão
-      3. açucar
-      4. sal
-      `
-      */
 
     if (!nomeRemover) return;
 
@@ -135,6 +131,7 @@
     if (!removido) alert("Produto não encontrado!");
   }
   //#endregion
+
   //#region Ajustar os Preços
 
   function ajustarPrecos() {
@@ -160,9 +157,10 @@
       }
     }
 
-    if (!encontrado) alert("Produto não encontrado, senhor.");
+    if (!encontrado) alert("Produto não encontrado!");
   }
   //#endregion
+  
   //#region Relatório
 
   function relatorio() {
@@ -181,12 +179,19 @@
       }
     }
 
-    console.log(
-      `Produtos Baratos:\n${baratos.join(", ")}\n\n` +
-        `Produtos Médios:\n${medios.join(", ")}\n\n` +
-        `Produtos Caros:\n${caros.join(", ")}\n\n` +
-        `Estoque Baixo:\n${poucos.join(", ")}`
-    );
+    if (
+      baratos.length > 0 ||
+      medios.length > 0 ||
+      caros.length > 0 ||
+      poucos.length > 0
+    ) {
+      alert(
+        (baratos.length ? `Produtos Baratos:\n${baratos.join(", ")}\n\n` : "") +
+          (medios.length ? `Produtos Médios:\n${medios.join(", ")}\n\n` : "") +
+          (caros.length ? `Produtos Caros:\n${caros.join(", ")}\n\n` : "") +
+          (poucos.length ? `Estoque Baixo:\n${poucos.join(", ")}` : "")
+      );
+    }
   }
   //#endregion
 </script>
